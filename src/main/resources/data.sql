@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS logstat;
+
+CREATE TABLE logstat(
+  id INT AUTO_INCREMENT  PRIMARY KEY,
+  url VARCHAR(512) NOT NULL,
+  ip VARCHAR(250) NOT NULL,
+  event_time long NOT NULL,
+  PRIMARY KEY (id)
+);
