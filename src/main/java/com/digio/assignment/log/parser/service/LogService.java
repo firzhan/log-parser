@@ -2,10 +2,12 @@ package com.digio.assignment.log.parser.service;
 
 import com.digio.assignment.log.parser.exception.LogFileNotFoundException;
 import com.digio.assignment.log.parser.model.LogStat;
+import com.digio.assignment.log.parser.utils.LogParserConstants;
 import com.digio.assignment.log.parser.utils.LogParserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -34,6 +36,7 @@ public class LogService {
         Pattern pattern = Pattern.compile(logPatternRedExp);
         List<LogStat> logStatList = new ArrayList<>();
         try {
+            //NIO Package access the files in a lazy reading approach
             Files.lines(path).forEach(line -> {
                 try {
                     processLog(line, pattern, logStatList);
@@ -54,14 +57,14 @@ public class LogService {
 
         Matcher matcher = pattern.matcher(line);
         if (!matcher.matches() ||
-                9 != matcher.groupCount()) {
+                LogParserConstants.DEFAULT_MAX_MATCHER_GROUP_COUNT != matcher.groupCount()) {
             logger.error("Bad log entry " + line);
         } else {
             LogStat logStat = new LogStat();
             logStat.setIp(matcher.group(1));
 
             int responseCode = Integer.parseInt(matcher.group(6));
-            if(responseCode < 400){
+            if(responseCode < HttpStatus.BAD_REQUEST.value()){
                 String request = matcher.group(5);
                 String[] requestArray = request.split(" ");
                 logStat.setUrl(requestArray[1]);

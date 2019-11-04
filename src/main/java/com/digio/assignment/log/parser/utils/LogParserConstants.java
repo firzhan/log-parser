@@ -3,6 +3,7 @@ package com.digio.assignment.log.parser.utils;
 public class LogParserConstants {
 
     public static final int DEFAULT_MAX_LIMIT_COUNT = 3;
+    public static final int DEFAULT_MAX_MATCHER_GROUP_COUNT = 9;
 
     public static final String URL_CONSTANT = "url";
     public static final String IP_CONSTANT = "ip";
