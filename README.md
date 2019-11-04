@@ -30,14 +30,14 @@ Execution Steps
 (1) The application is created using java8, spring-boot and maven. 
     Following command could be used to build the code.
     
-    **mvn package install**
+    mvn package install
     
 (2) The relevant jar file is created in the **target** directory. Hence, the following 
     command could be used to run the jar.
     
-    **java -jar target/log-parser-1.0.0.jar --log=<PATH>/access.log**
+    java -jar target/log-parser-1.0.0.jar --log=<PATH>/access.log
     
-    **--log** param is used to set the path of the access log file to be processed by the app.
+    ** --log param is used to set the path of the access log file to be processed by the app.
 
 (3) The tool uses a in-mem h2 database for ease of packing in this use case. JPA layer is 
     used to access the h2 database.
