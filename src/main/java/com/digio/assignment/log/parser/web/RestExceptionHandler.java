@@ -1,5 +1,6 @@
 package com.digio.assignment.log.parser.web;
 
+import com.digio.assignment.log.parser.exception.DateTimeFormatException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
@@ -14,7 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({ConstraintViolationException.class,
-            DataIntegrityViolationException.class })
+            DataIntegrityViolationException.class, DateTimeFormatException.class})
     public ResponseEntity<Object> handleBadRequest(
             Exception ex, WebRequest request) {
         return handleExceptionInternal(ex, ex.getLocalizedMessage(),

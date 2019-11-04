@@ -88,14 +88,6 @@ class LogParserAppApplicationTests {
                 "10000000000000,\n" + "  \"count\": 3\n" + "}";
         List<String> urlList =
                 given().contentType(ContentType.JSON).body(payload).post(API + "/url/unique").then().extract().jsonPath().getList("urls.url");
-
-               /* .statusCode(HttpStatus.OK.value())
-                .body("count", equalTo(0));
-
-        List<String> urlList =
-				get(API + "/url/unique/3").then().extract().jsonPath().getList
-				("urls.url");*/
-
         assertFalse(urlList.contains("url4"));
     }
 

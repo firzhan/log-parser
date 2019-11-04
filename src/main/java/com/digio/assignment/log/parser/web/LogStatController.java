@@ -1,8 +1,10 @@
 package com.digio.assignment.log.parser.web;
 
+import com.digio.assignment.log.parser.exception.DateTimeFormatException;
 import com.digio.assignment.log.parser.model.LogStat;
 import com.digio.assignment.log.parser.model.RequestObj;
 import com.digio.assignment.log.parser.repo.LogRepository;
+import com.digio.assignment.log.parser.utils.LogParserConstants;
 import com.digio.assignment.log.parser.utils.LogParserUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -42,10 +44,11 @@ public class LogStatController {
             long endTime = requestObj.getEndTime() == 0L ?
                     LogParserUtils.getCurrentEpochTime() :
                     requestObj.getEndTime();
-            jsonObject.put("count",
+            jsonObject.put(LogParserConstants.COUNT_CONSTANT,
                     logRepository.findUniqueIPsCount(startTime, endTime));
         } catch (ParseException e) {
-            e.printStackTrace();
+            throw new DateTimeFormatException("TimeStamp conversation failed"
+                    , e.getCause());
         }
 
         return ResponseEntity.ok(jsonObject);
@@ -61,7 +64,8 @@ public class LogStatController {
             long endTime = requestObj.getEndTime() == 0L ?
                     LogParserUtils.getCurrentEpochTime() :
                     requestObj.getEndTime();
-            int count = requestObj.getCount() == -1 ? 3 : requestObj.getCount();
+            int count = requestObj.getCount() == -1 ? LogParserConstants.DEFAULT_MAX_LIMIT_COUNT :
+                    requestObj.getCount();
             List<Object[]> urlsList =
                     logRepository.findMostVisitedURLs(startTime, endTime,
                             count);
@@ -69,13 +73,14 @@ public class LogStatController {
 
             for (Object[] ipObj : urlsList) {
                 JSONObject obj = new JSONObject();
-                obj.put("url", ipObj[0]);
-                obj.put("count", ipObj[1]);
+                obj.put(LogParserConstants.URL_CONSTANT, ipObj[0]);
+                obj.put(LogParserConstants.COUNT_CONSTANT, ipObj[1]);
                 jsonArray.add(obj);
             }
-            jsonObject.put("urls", jsonArray);
+            jsonObject.put(LogParserConstants.URLS_CONSTANT, jsonArray);
         } catch (ParseException e) {
-            e.printStackTrace();
+            throw new DateTimeFormatException("TimeStamp conversation failed"
+                    , e.getCause());
         }
         return ResponseEntity.ok(jsonObject);
 
@@ -91,7 +96,8 @@ public class LogStatController {
             long endTime = requestObj.getEndTime() == 0L ?
                     LogParserUtils.getCurrentEpochTime() :
                     requestObj.getEndTime();
-            int count = requestObj.getCount() == -1 ? 3 : requestObj.getCount();
+            int count = requestObj.getCount() == -1 ? LogParserConstants.DEFAULT_MAX_LIMIT_COUNT :
+                    requestObj.getCount();
 
             List<Object[]> ipsList =
                     logRepository.findMostActiveIPs(startTime, endTime, count);
@@ -99,14 +105,15 @@ public class LogStatController {
 
             for (Object[] ipObj : ipsList) {
                 JSONObject obj = new JSONObject();
-                obj.put("ip", ipObj[0]);
-                obj.put("count", ipObj[1]);
+                obj.put(LogParserConstants.IP_CONSTANT, ipObj[0]);
+                obj.put(LogParserConstants.COUNT_CONSTANT, ipObj[1]);
                 jsonArray.add(obj);
             }
-            jsonObject.put("ips", jsonArray);
+            jsonObject.put(LogParserConstants.IPS_CONSTANT, jsonArray);
 
         } catch (ParseException e) {
-            e.printStackTrace();
+            throw new DateTimeFormatException("TimeStamp conversation failed"
+                    , e.getCause());
         }
         return ResponseEntity.ok(jsonObject);
     }
